@@ -1,12 +1,14 @@
-import type { MetadataRoute } from 'next'
- 
-export default function robots(): MetadataRoute.Robots {
+export const dynamic = 'force-dynamic'
+
+export default async function robots() {
+  const time = await fetch("http://worldtimeapi.org/api/timezone/Europe/Paris");
+  const unixtime = await time.json();
   return {
     rules: {
       userAgent: '*',
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://acme.com/sitemap.xml',
+    sitemap: 'https://acme.com/sitemap.xml?time=' + unixtime['unixtime'],
   }
 }
